@@ -1,0 +1,94 @@
+* {
+    padding: 0;
+    margin: 0;
+  }
+  html,
+  body {
+    width: 100%;
+    height: 100%;
+  }
+  #map {
+    background: #000;
+    height: 100%;
+  }
+  
+  /* https://codepen.io/owenjam/pen/xRPMao */
+  .custom-popup .leaflet-popup-content-wrapper {
+    background: #7ee097;
+    color: #ee0c0c;
+    font-size: 16px;
+    line-height: 24px;
+    border-radius: 10px;
+    border: 2px solid #007bff; /* Borde azul de 2px */
+  }
+  .custom-popup .leaflet-popup-content-wrapper a {
+    color: rgba(24, 8, 238, 0.986);
+  }
+  .custom-popup .leaflet-popup-tip-container {
+    width: 30px;
+    height: 15px;
+  }
+  .custom-popup .leaflet-popup-tip {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+  }
+
+  .custom-popup img {
+    display: block;
+    margin: 10px auto; /* Centro horizontal y margen superior de 10px */
+    width: 100px;
+    height: auto;
+    border: 2px solid  #007bff; /* Borde de 2px color negro */
+    border-radius: 5px; /* Bordes ligeramente redondeados (opcional) */
+  }   
+
+  
+  /*another-popop style*/
+  .another-popup .leaflet-popup-content-wrapper {
+    background: #da4805;
+    color: #eee;
+    font-size: 18px;
+    line-height: 24px;
+    border-radius: 0px;
+  }
+  .another-popup .leaflet-popup-content-wrapper a {
+    color: rgba(200, 200, 200, 0.1);
+  }
+  .another-popup .leaflet-popup-tip-container {
+    width: 50px;
+    height: 15px;
+  }
+  .another-popup .leaflet-popup-tip {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+  }
+  
+
+  .lista-clientes-titulo {
+    font-size: 30px;
+    color: #08bb2f; /* Cambia el color a azul */
+    font-weight: bold;
+}
+
+/* Sobrescribir alguna clase de Bootstrap (solo si es necesario) */
+.text-center {
+    text-align: left; /* Cambia el texto alineado a la izquierda solo en este caso */
+}
+
+.mi-popup .leaflet-popup-content-wrapper {
+    font-size: 18px;
+    color: #f70606;
+}
+
+.mi-popup img {
+    width: 80px;
+    height: auto;
+    margin-top: 5px;
+}
+
+.mi-popup a {
+    color: blue;
+    text-decoration: underline;
+}
