@@ -38,7 +38,8 @@ class ClienteController {
         $clientesWithDistance = [];
 
         // Calcular la distancia de cada cliente al punto dado
-        while ($cliente = $clientes->fetch(PDO::FETCH_ASSOC)) {
+        foreach ($clientes as $cliente) {
+            // Calcular la distancia entre la ubicación dada y el cliente
             $distance = calculateDistance($lat, $lon, $cliente['latitud'], $cliente['longitud']);
             $cliente['distance'] = $distance;
             $clientesWithDistance[] = $cliente;
