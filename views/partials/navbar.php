@@ -16,6 +16,17 @@
         <li class="nav-item">
           <a class="nav-link" href="index.php?action=list">Consultar</a>
         </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="index.php?action=list_nodos">Nodos</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="index.php?action=create_cliente_nodo">Crear Nodo</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="index.php?action=logout">Salir</a>
+        </li>
+        
       </ul>
     </div>
   </div>
