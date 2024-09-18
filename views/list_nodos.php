@@ -33,10 +33,11 @@
                         <?php foreach ($nodos as $nodo): ?>
                             <tr>
                                 <td>
-                                    <a href="index.php?action=create_cliente_nodo">
-                                    <?= $nodo['nombre']; ?>
+                                    <a href="index.php?action=list_clientes_nodo&nodo_id=<?= $nodo['id']; ?>">
+                                        <?= $nodo['nombre']; ?>
                                     </a>
                                 </td>
+
                                 <td><?= $nodo['latitud']; ?></td>
                                 <td><?= $nodo['longitud']; ?></td>
                                 <td>
