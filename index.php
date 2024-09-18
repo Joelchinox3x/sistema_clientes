@@ -8,6 +8,7 @@ session_start();
 include_once 'controllers/ClienteController.php';
 include_once 'controllers/AuthController.php';
 include_once 'controllers/NodoController.php';
+include_once 'controllers/ClienteNodoController.php';
 include_once 'includes/helpers.php';
 
 $action = isset($_GET['action']) ? $_GET['action'] : 'home';
@@ -27,34 +28,64 @@ switch ($action) {
         include 'views/home.php';
         break;
 
-    case 'login':
+    case 'list':
+        $controller = new ClienteController();
+        $clientes = $controller->readAll();
+        include 'views/list.php';
+        break;
+    
+    case 'create':
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $authController = new AuthController();
-            if ($authController->login($_POST['username'], $_POST['password'])) {
-                header("Location: index.php?action=home");
-                exit();
+            $controller = new ClienteController();
+            if ($controller->create($_POST['cedula'], $_POST['nombres'], $_POST['apellidos'], $_POST['direccion'], $_POST['latitud'], $_POST['longitud'])) {
+                header("Location: index.php?action=list");
+                exit;
             } else {
-                $error_message = "Nombre de usuario o contraseña incorrectos.";
-                include 'views/login.php';
+                echo "Error al guardar el cliente";
             }
         } else {
-            include 'views/login.php';
+            include 'views/create.php';
+        }
+        break;
+    
+    case 'edit':
+        if (isset($_GET['id'])) {
+            include 'views/edit.php';
+        } else {
+            echo "Cliente no encontrado.";
         }
         break;
 
-    case 'register':
+    case 'update':
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $authController = new AuthController();
-            if ($authController->register($_POST['username'], $_POST['password'])) {
-                header("Location: index.php?action=login");
-                exit();
+            $controller = new ClienteController();
+            if ($controller->update($_GET['id'], $_POST['cedula'], $_POST['nombres'], $_POST['apellidos'], $_POST['direccion'], $_POST['latitud'], $_POST['longitud'])) {
+                header("Location: index.php?action=list");
+                exit;
             } else {
-                $error_message = "El usuario ya existe o hubo un error.";
-                include 'views/register.php';
+                echo "Error al actualizar el cliente";
             }
         } else {
-            include 'views/register.php';
+            echo "Método no permitido.";
         }
+        break;
+
+    case 'delete':
+        if (isset($_GET['id'])) {
+            $controller = new ClienteController();
+            if ($controller->delete($_GET['id'])) {
+                header("Location: index.php?action=list");
+                exit;
+            } else {
+                echo "Error al eliminar el cliente";
+            }
+        }
+            break;
+
+    case 'list_nodos':
+        $nodoController = new NodoController();
+        $nodos = $nodoController->getNodosByUser($_SESSION['username']);  // Obtener nodos del usuario logueado
+        include 'views/list_nodos.php';
         break;
 
     case 'create_nodo':
@@ -120,10 +151,12 @@ switch ($action) {
         }
         break;
 
-    case 'list_nodos':
-        $nodoController = new NodoController();
-        $nodos = $nodoController->getNodosByUser($_SESSION['username']);  // Obtener nodos del usuario logueado
-        include 'views/list_nodos.php';
+    case 'list_clientes_nodo':
+        // Obtener todos los clientes asociados a un nodo específico
+        $nodo_id = $_GET['nodo_id'];
+        $clienteNodoController = new ClienteNodoController();
+        $clientes = $clienteNodoController->getClientesByNodoId($nodo_id);  // Obtener clientes por nodo
+        include 'views/list_cliente_nodo.php';  // Incluir la vista de lista de clientes
         break;
 
     case 'create_cliente_nodo':
@@ -141,7 +174,7 @@ switch ($action) {
                 $_POST['observaciones'],
                 $_POST['nodo_id']
             )) {
-                header("Location: index.php?action=list_nodos");
+                header("Location: index.php?action=list_cliente_nodo");
                 exit();
             } else {
                 echo "Error al crear el cliente.";
@@ -150,33 +183,55 @@ switch ($action) {
             include 'views/create_cliente_nodo.php';
         }
         break;
-    
-    case 'create':
+
+    case 'edit_cliente_nodo':
+        // Lógica para editar un cliente
+        $clienteNodoController = new ClienteNodoController();
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $controller = new ClienteController();
-            if ($controller->create($_POST['cedula'], $_POST['nombres'], $_POST['apellidos'], $_POST['direccion'], $_POST['latitud'], $_POST['longitud'])) {
-                header("Location: index.php?action=list");
-                exit;
-            } else {
-                echo "Error al guardar el cliente";
-            }
+            // Procesar la actualización
+            $clienteNodoController->updateClienteNodo(
+                $_GET['id'],
+                $_POST['dni'],
+                $_POST['nombres'],
+                $_POST['apellidos'],
+                $_POST['telefono'],
+                $_POST['direccion'],
+                $_POST['ip_cliente'],
+                $_POST['latitud'],
+                $_POST['longitud'],
+                $_POST['observaciones']
+            );
+            header('Location: index.php?action=list_clientes_nodo&nodo_id=' . $_POST['nodo_id']);
         } else {
-            include 'views/create.php';
+            // Mostrar el formulario con los datos del cliente actual
+            $cliente = $clienteNodoController->getClienteById($_GET['id']);
+            include 'views/edit_cliente_nodo.php';  // Incluir vista de edición de cliente
         }
         break;
 
-    case 'update':
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $controller = new ClienteController();
-            if ($controller->update($_GET['id'], $_POST['cedula'], $_POST['nombres'], $_POST['apellidos'], $_POST['direccion'], $_POST['latitud'], $_POST['longitud'])) {
-                header("Location: index.php?action=list");
-                exit;
-            } else {
-                echo "Error al actualizar el cliente";
-            }
-        } else {
-            echo "Método no permitido.";
-        }
+    case 'update_cliente_nodo':
+        // Actualizar un cliente existente (esto puede combinarse con edit_cliente_nodo)
+        $clienteNodoController = new ClienteNodoController();
+        $clienteNodoController->updateClienteNodo(
+            $_GET['id'],
+            $_POST['dni'],
+            $_POST['nombres'],
+            $_POST['apellidos'],
+            $_POST['telefono'],
+            $_POST['direccion'],
+            $_POST['ip_cliente'],
+            $_POST['latitud'],
+            $_POST['longitud'],
+            $_POST['observaciones']
+        );
+        header('Location: index.php?action=list_clientes_nodo&nodo_id=' . $_POST['nodo_id']);
+        break;
+    
+    case 'delete_cliente_nodo':
+        // Lógica para eliminar un cliente
+        $clienteNodoController = new ClienteNodoController();
+        $clienteNodoController->deleteClienteNodo($_GET['id']);
+        header('Location: index.php?action=list_clientes_nodo&nodo_id=' . $_GET['nodo_id']);
         break;
 
     case 'list_by_distance': //Listar clientes por distancia
@@ -197,33 +252,37 @@ switch ($action) {
             exit;
         }
         break;
-   
-    case 'list':
-        $controller = new ClienteController();
-        $clientes = $controller->readAll();
-        include 'views/list.php';
-        break;
 
-    case 'edit':
-        if (isset($_GET['id'])) {
-            include 'views/edit.php';
-        } else {
-            echo "Cliente no encontrado.";
-        }
-        break;
-
-    case 'delete':
-        if (isset($_GET['id'])) {
-            $controller = new ClienteController();
-            if ($controller->delete($_GET['id'])) {
-                header("Location: index.php?action=list");
-                exit;
+    case 'login':
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                $authController = new AuthController();
+                if ($authController->login($_POST['username'], $_POST['password'])) {
+                    header("Location: index.php?action=home");
+                    exit();
+                } else {
+                    $error_message = "Nombre de usuario o contraseña incorrectos.";
+                    include 'views/login.php';
+                }
             } else {
-                echo "Error al eliminar el cliente";
+                include 'views/login.php';
             }
+            break;
+
+    case 'register':
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $authController = new AuthController();
+            if ($authController->register($_POST['username'], $_POST['password'])) {
+                header("Location: index.php?action=login");
+                exit();
+            } else {
+                $error_message = "El usuario ya existe o hubo un error.";
+                include 'views/register.php';
+            }
+        } else {
+            include 'views/register.php';
         }
         break;
-    
+
     case 'logout':
         // Cerrar sesión
         session_destroy();
