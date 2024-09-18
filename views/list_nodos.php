@@ -4,10 +4,8 @@
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-10">
-
             <!-- Saludo personalizado -->
             <h2 class="mb-4 text-center">Hola, <?= $_SESSION['username']; ?>, estos son tus nodos:</h2>
-
             <!-- Verificar si hay nodos asociados al usuario -->
             <?php if (empty($nodos)): ?>
                 <div class="alert alert-warning text-center">
