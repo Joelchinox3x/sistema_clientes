@@ -60,22 +60,32 @@ if (isset($_GET['id'])) {
         maxZoom: 19,
     }).addTo(map);
 
-    // Agregar un marcador arrastrable al mapa con la posición actual
-    var marker = L.marker([<?php echo $cliente['latitud']; ?>, <?php echo $cliente['longitud']; ?>], {draggable: true}).addTo(map);
+ // Generar marcadores de clientes usando PHP
+ <?php if (isset($clientes)): ?>
+        <?php foreach ($clientes as $cliente): ?>
+            <?php if ($cliente['latitud'] && $cliente['longitud']): ?>
+                var marker = L.marker([<?php echo $cliente['latitud']; ?>, <?php echo $cliente['longitud']; ?>], {draggable: true}).addTo(map);
+                marker.bindPopup("<b>Cliente: </b><?php echo $cliente['nombres'] . ' ' . $cliente['apellidos']; ?><br><b>Dirección: </b><?php echo $cliente['direccion']; ?>", {
+                    maxWidth: 200,
+                    closeButton: false,
+                    autoClose: false
+                });
 
-    // Actualizar los campos de latitud y longitud cuando se mueva el marcador
-    marker.on('dragend', function(e) {
-        var latlng = marker.getLatLng();
-        document.getElementById('latitud').value = latlng.lat;
-        document.getElementById('longitud').value = latlng.lng;
-    });
+                // Actualizar los campos de latitud y longitud cuando el marcador se mueva
+                marker.on('dragend', function(e) {
+                    var latlng = marker.getLatLng();
+                    document.getElementById('latitud').value = latlng.lat;
+                    document.getElementById('longitud').value = latlng.lng;
+                });
 
-    // Permitir que el usuario agregue un nuevo marcador haciendo clic en el mapa
-    map.on('click', function(e) {
-        marker.setLatLng(e.latlng);
-        document.getElementById('latitud').value = e.latlng.lat;
-        document.getElementById('longitud').value = e.latlng.lng;
-    });
+                map.on('click', function(e) {
+                    marker.setLatLng(e.latlng);
+                    document.getElementById('latitud').value = e.latlng.lat;
+                    document.getElementById('longitud').value = e.latlng.lng;
+                });
+            <?php endif; ?>
+        <?php endforeach; ?>
+    <?php endif; ?>
 </script>
 
 <?php include('partials/footer.php'); ?>
