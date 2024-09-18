@@ -42,11 +42,10 @@ class ClienteDAO {
 
     public function readAll() {
         $query = "SELECT * FROM " . $this->table_name . " ORDER BY id DESC";
-
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
 
-        return $stmt;
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function update(ClienteDTO $cliente) {
