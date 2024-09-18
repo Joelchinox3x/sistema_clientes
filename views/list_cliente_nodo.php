@@ -7,7 +7,12 @@
             <!-- Saludo personalizado -->
             <h2 class="mb-4 text-center">Hola, <?= $_SESSION['username']; ?>, estos son los clientes de tu nodo:</h2>
              <!-- Verificar si hay clientes asociados al nodo -->
-        
+            <?php if (empty($clientes)): ?>
+            <div class="alert alert-warning text-center">
+                No hay clientes asociados a este nodo aún.
+                <a href="index.php?action=create_cliente_nodo&nodo_id=<?= $nodo_id; ?>" class="btn btn-primary">Crear Primer Cliente</a>
+            </div>
+            <?php else: ?>
                <!-- Mapa -->
             <div id="map" style="height: 600px; width: 100%;" class="mb-4"></div>
              <!-- Mostrar la tabla de clientes si existen -->
