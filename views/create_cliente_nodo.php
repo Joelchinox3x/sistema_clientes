@@ -6,7 +6,6 @@
         <div class="col-md-6">
             <h2 class="mb-4 text-center">Agregar Cliente al Nodo</h2>
             <form action="index.php?action=create_cliente_nodo" method="POST">
-              
                 <div class="form-group">
                     <label for="dni">DNI:</label>
                     <input type="text" class="form-control" id="dni" name="dni" required>
