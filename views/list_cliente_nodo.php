@@ -7,12 +7,7 @@
             <!-- Saludo personalizado -->
             <h2 class="mb-4 text-center">Hola, <?= $_SESSION['username']; ?>, estos son los clientes de tu nodo:</h2>
              <!-- Verificar si hay clientes asociados al nodo -->
-            <?php if (empty($clientes)): ?>
-                <div class="alert alert-warning text-center">
-                    No hay clientes asociados a este nodo aún.
-                    <a href="index.php?action=create_cliente_nodo&nodo_id=<?= $nodo_id; ?>" class="btn btn-primary">Crear Primer Cliente</a>
-                </div>
-            <?php else: ?>
+        
                <!-- Mapa -->
             <div id="map" style="height: 600px; width: 100%;" class="mb-4"></div>
              <!-- Mostrar la tabla de clientes si existen -->
@@ -52,27 +47,4 @@
 
 <?php include('partials/footer.php'); ?>
 
-<!-- Incluir Leaflet para el mapa -->
-<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-
-<!-- Mapa y marcadores para los nodos -->
-<script>
-    <?php if (!empty($nodos)): ?>
-    var nodos = <?php echo json_encode($nodos); ?>;
-    
-    // Inicializar el mapa en una ubicación predeterminada
-    var map = L.map('map').setView([nodos[0].latitud, nodos[0].longitud], 13);
-
-    // Agregar capa de OpenStreetMap
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(map);
-
-    // Añadir marcadores para cada nodo
-    nodos.forEach(function(nodo) {
-        var marker = L.marker([nodo.latitud, nodo.longitud]).addTo(map);
-        marker.bindPopup("<b>Nombre del Nodo:</b> " + nodo.nombre + "<br><b>Latitud:</b> " + nodo.latitud + "<br><b>Longitud:</b> " + nodo.longitud);
-    });
-    <?php endif; ?>
-</script>
+ 
