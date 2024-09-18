@@ -3,7 +3,7 @@ include_once 'config/database.php';
 
 class ClienteNodoDAO {
     private $conn;
-    private $table_name = "clientesxNodo";
+    private $table_name = "clientes_nodo";
     private static $instance = null;
 
     private function __construct() {
