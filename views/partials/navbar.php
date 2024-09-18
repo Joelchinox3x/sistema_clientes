@@ -21,8 +21,16 @@
           <a class="nav-link" href="index.php?action=list_nodos">Nodos</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="index.php?action=create_cliente_nodo">Crear Nodo</a>
+          <a class="nav-link" href="index.php?action=create_nodo">Crear Nodo</a>
         </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="index.php?action=list_clientes_nodo">ClientNodos</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="index.php?action=create_cliente_nodo">Crear clientNodo</a>
+        </li>
+
         <li class="nav-item">
           <a class="nav-link" href="index.php?action=logout">Salir</a>
         </li>
