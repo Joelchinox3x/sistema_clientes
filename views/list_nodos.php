@@ -15,7 +15,6 @@
             <?php else: ?>
                 <!-- Mapa -->
                 <div id="map" style="height: 600px; width: 100%;" class="mb-4"></div>
-
                 <!-- Tabla de nodos -->
                 <h2 class="mb-4 text-center">Lista de Nodos</h2>
                 <table class="table table-striped">
@@ -47,7 +46,6 @@
                     </tbody>
                 </table>
             <?php endif; ?>
-
         </div>
     </div>
 </div>
