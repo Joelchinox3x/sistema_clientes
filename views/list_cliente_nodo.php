@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-10">
             <!-- Saludo personalizado -->
-            <h2 class="mb-4 text-center">Hola, <?= $_SESSION['username']; ?>, estos son los clientes de tu nodo:</h2>
+            <h2 class="mb-4 text-center">Hola, <?= $_SESSION['username']; ?>, estos son los clientes de tu nodo:</h2>            
             <!-- Verificar si hay clientes asociados al nodo -->
             <?php if (empty($clientes)): ?>
                 <div class="alert alert-warning text-center">
@@ -15,6 +15,12 @@
             <?php else: ?>
                 <!-- Mapa -->
                 <div id="map" style="height: 600px; width: 100%;" class="mb-4"></div>
+
+                <!-- Botón de crear cliente -->
+                <div class="text-right mb-3">
+                    <a href="index.php?action=create_cliente_nodo&nodo_id=<?= $nodo_id; ?>" class="btn btn-primary">Crear Nuevo Cliente</a>
+                </div>
+
                 <!-- Mostrar la tabla de clientes si existen -->
                 <h2 class="mb-4 text-center">Lista de Clientes del Nodo</h2>
                 <table class="table table-striped">
