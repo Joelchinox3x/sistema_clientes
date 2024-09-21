@@ -1,20 +1,22 @@
 <?php include('partials/header.php'); ?>
 <?php include('partials/navbar.php'); ?>
 
+<?php 
+// Obtener el cliente por ID
+$clienteNodoController = new ClienteNodoController(); 
+$cliente = $clienteNodoController->getClienteById($_GET['id']);
+$nombreCliente = $cliente['nombres'] . ' ' . $cliente['apellidos'];
+
+// Obtener el nodo al que pertenece el cliente
+$nodoController = new NodoController();
+$nodo = $nodoController->getNodoById($cliente['nodo_id']);
+$nombreNodo = $nodo['nombre'];
+?>
+
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <?php 
-                    // Obtener el cliente por ID
-                    $clienteNodoController = new ClienteNodoController(); 
-                    $cliente = $clienteNodoController->getClienteById($_GET['id']);
-                    $nombreCliente = $cliente['nombres'] . ' ' . $cliente['apellidos'];
-
-                    // Obtener el nodo al que pertenece el cliente
-                    $nodoController = new NodoController();
-                    $nodo = $nodoController->getNodoById($cliente['nodo_id']);
-                    $nombreNodo = $nodo['nombre'];
-            ?>
+            
             <!-- Título con el nombre del cliente y el nombre del nodo -->
             <h2 class="mb-4 text-center">Editar Cliente (<?= $nombreCliente; ?>) del Nodo (<?= $nombreNodo; ?>)</h2>
             
@@ -42,7 +44,7 @@
                 </div>
                 <div class="form-group">
                     <label for="ip_cliente">IP del Cliente:</label>
-                    <input type="text" class="form-control" id="ip_cliente" name="ip_cliente" value="<?= $cliente['ip_cliente']; ?>" >
+                    <input type="text" class="form-control" id="ip_cliente" name="ip_cliente" value="<?= $cliente['ip_cliente']; ?>">
                 </div>
                 <div class="form-group">
                     <label for="latitud">Latitud:</label>
@@ -54,7 +56,7 @@
                 </div>
                 <div class="form-group">
                     <label for="observaciones">Observaciones:</label>
-                    <input type="text" class="form-control" id="observaciones" name="observaciones" value="<?= $cliente['observaciones']; ?>" >
+                    <input type="text" class="form-control" id="observaciones" name="observaciones" value="<?= $cliente['observaciones']; ?>">
                 </div>
                 <div id="map" style="height: 400px; width: 100%;"></div>
                 <br>
