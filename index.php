@@ -92,7 +92,12 @@ switch ($action) {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $nodoController = new NodoController();
             $username = $_SESSION['username']; // Obtener el nombre de usuario desde la sesión
-            if ($nodoController->createNodo($_POST['nombre'], $_POST['latitud'], $_POST['longitud'], $username)) {
+            if ($nodoController->createNodo(
+                $_POST['nombre'], 
+                $_POST['latitud'], 
+                $_POST['longitud'], 
+                $username
+            )) {
                 header("Location: index.php?action=list_nodos");
                 exit();
             } else {
@@ -160,9 +165,20 @@ switch ($action) {
         break;
 
     case 'create_cliente_nodo':
+        // Verificar si el nodo_id está presente en la URL
+        if (isset($_GET['nodo_id'])) {
+            $nodo_id = $_GET['nodo_id']; // Obtener nodo_id de la URL
+            echo "Nodo ID es: " . $nodo_id; // Imprimir el nodo_id
+        } else {
+            echo "Error: nodo_id no proporcionado.";
+            exit();
+        }
+    
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $clienteNodoController = new ClienteNodoController();
-            if ($clienteNodoController->createCliente(
+    
+            // Crear cliente y asociarlo al nodo
+            if ($clienteNodoController->createClienteNodo(
                 $_POST['dni'],
                 $_POST['nombres'],
                 $_POST['apellidos'],
@@ -172,17 +188,20 @@ switch ($action) {
                 $_POST['latitud'],
                 $_POST['longitud'],
                 $_POST['observaciones'],
-                $_POST['nodo_id']
+                $nodo_id  // Pasar el nodo_id desde la URL o el formulario oculto
             )) {
-                header("Location: index.php?action=list_cliente_nodo");
+                // Redirigir a la lista de clientes del nodo
+                header("Location: index.php?action=list_clientes_nodo&nodo_id=$nodo_id");
                 exit();
             } else {
                 echo "Error al crear el cliente.";
             }
         } else {
+            // Cargar la vista de creación de cliente, pasando nodo_id a la vista
             include 'views/create_cliente_nodo.php';
         }
         break;
+        
 
     case 'edit_cliente_nodo':
         // Lógica para editar un cliente
@@ -226,13 +245,18 @@ switch ($action) {
         );
         header('Location: index.php?action=list_clientes_nodo&nodo_id=' . $_POST['nodo_id']);
         break;
-    
+
     case 'delete_cliente_nodo':
         // Lógica para eliminar un cliente
-        $clienteNodoController = new ClienteNodoController();
-        $clienteNodoController->deleteClienteNodo($_GET['id']);
-        header('Location: index.php?action=list_clientes_nodo&nodo_id=' . $_GET['nodo_id']);
+        if (isset($_GET['id']) && isset($_GET['nodo_id'])) {
+            $clienteNodoController = new ClienteNodoController();
+            $clienteNodoController->deleteClienteNodo($_GET['id']);
+            header('Location: index.php?action=list_clientes_nodo&nodo_id=' . $_GET['nodo_id']);
+        } else {
+            echo "Error: id o nodo_id no proporcionado.";
+        }
         break;
+        
 
     case 'list_by_distance': //Listar clientes por distancia
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
