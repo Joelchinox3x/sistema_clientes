@@ -11,7 +11,20 @@ if (isset($_GET['id'])) {
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <h2 class="mb-4 text-center">Editar Cliente del Nodo</h2>
+            <?php 
+                    // Obtener el cliente por ID
+                    $clienteNodoController = new ClienteNodoController(); 
+                    $cliente = $clienteNodoController->getClienteById($_GET['id']);
+                    $nombreCliente = $cliente['nombres'] . ' ' . $cliente['apellidos'];
+
+                    // Obtener el nodo al que pertenece el cliente
+                    $nodoController = new NodoController();
+                    $nodo = $nodoController->getNodoById($cliente['nodo_id']);
+                    $nombreNodo = $nodo['nombre'];
+            ?>
+            <!-- Título con el nombre del cliente y el nombre del nodo -->
+            <h2 class="mb-4 text-center">Editar Cliente (<?= $nombreCliente; ?>) del Nodo (<?= $nombreNodo; ?>)</h2>
+            
             <form action="index.php?action=update_cliente_nodo&id=<?php echo $cliente['id']; ?>" method="POST">
                 <input type="hidden" name="nodo_id" value="<?= $cliente['nodo_id'] ?>">
                 <div class="form-group">
