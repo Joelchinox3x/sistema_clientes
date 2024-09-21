@@ -15,7 +15,7 @@ $nombreNodo = $nodo['nombre'];
 
 <div class="container mt-5">
     <div class="row justify-content-center">
-        <div class="col-md-8">            
+        <div class="col-md-8">
             <!-- Título con el nombre del cliente y el nombre del nodo -->
             <h2 class="mb-4 text-center">Editar Cliente (<?= $nombreCliente; ?>) del Nodo (<?= $nombreNodo; ?>)</h2>
             
