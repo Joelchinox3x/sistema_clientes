@@ -39,21 +39,7 @@ class NodoDTO {
         $this->username = $username;
     }
 
-    public function setId($id) {
-        $this->id = $id;
-    }
-
-    public function setNombre($nombre) {
-        $this->nombre = $nombre;
-    }
-
-    public function setLatitud($latitud) {
-        $this->latitud = $latitud;
-    }
-
-    public function setLongitud($longitud) {
-        $this->longitud = $longitud;
-    }
+  
 }
 ?>
 
