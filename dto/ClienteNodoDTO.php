@@ -70,5 +70,8 @@ class ClienteNodoDTO {
     public function getNodoId() {
         return $this->nodo_id;
     }
+    public function setId($id) {
+        $this->id = $id;
+    }
 }
 ?>
