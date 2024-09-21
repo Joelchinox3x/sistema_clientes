@@ -1,7 +1,7 @@
 <?php include('partials/header.php'); ?>
 <?php include('partials/navbar.php'); ?>
 
-<?php 
+<?php
 // Obtener el cliente por ID
 $clienteNodoController = new ClienteNodoController(); 
 $cliente = $clienteNodoController->getClienteById($_GET['id']);
@@ -15,8 +15,7 @@ $nombreNodo = $nodo['nombre'];
 
 <div class="container mt-5">
     <div class="row justify-content-center">
-        <div class="col-md-8">
-            
+        <div class="col-md-8">            
             <!-- Título con el nombre del cliente y el nombre del nodo -->
             <h2 class="mb-4 text-center">Editar Cliente (<?= $nombreCliente; ?>) del Nodo (<?= $nombreNodo; ?>)</h2>
             
@@ -35,7 +34,7 @@ $nombreNodo = $nodo['nombre'];
                     <input type="text" class="form-control" id="apellidos" name="apellidos" value="<?= $cliente['apellidos']; ?>" required>
                 </div>
                 <div class="form-group">
-                    <label for="telefono">Telefono:</label>
+                    <label for="telefono">Teléfono:</label>
                     <input type="text" class="form-control" id="telefono" name="telefono" value="<?= $cliente['telefono']; ?>" required>
                 </div>
                 <div class="form-group">
