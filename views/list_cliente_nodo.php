@@ -4,8 +4,15 @@
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-10">
+            <!-- Obtener el nombre del nodo -->
+            <?php 
+                $nodoController = new NodoController(); 
+                $nodo = $nodoController->getNodoById($nodo_id);  // Obtener nodo por ID
+                $nombreNodo = $nodo['nombre'];  // Nombre del nodo
+            ?>
             <!-- Saludo personalizado -->
-            <h2 class="mb-4 text-center">Hola, <?= $_SESSION['username']; ?>, estos son los clientes de tu nodo:</h2>            
+            <h2 class="mb-4 text-center">Hola, <?= $_SESSION['username']; ?>, estos son los clientes de tu nodo: <?= $nombreNodo; ?></h2>
+                 
             <!-- Verificar si hay clientes asociados al nodo -->
             <?php if (empty($clientes)): ?>
                 <div class="alert alert-warning text-center">
@@ -22,7 +29,7 @@
                 </div>
 
                 <!-- Mostrar la tabla de clientes si existen -->
-                <h2 class="mb-4 text-center">Lista de Clientes del Nodo</h2>
+                <h2 class="mb-4 text-center">Lista de Clientes del Nodo: <?= $nombreNodo; ?></h2>
                 <table class="table table-striped">
                     <thead>
                         <tr>
