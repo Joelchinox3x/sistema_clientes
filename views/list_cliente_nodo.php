@@ -40,7 +40,7 @@
                                 <td><?= $cliente['longitud']; ?></td>
                                 <td>
                                     <a href="index.php?action=edit_cliente_nodo&id=<?= $cliente['id']; ?>" class="btn btn-warning btn-sm">Editar</a>
-                                    <a href="index.php?action=delete_cliente_nodo&id=<?= $cliente['id']; ?>" class="btn btn-danger btn-sm">Eliminar</a>
+                                    <a href="index.php?action=delete_cliente_nodo&id=<?= $cliente['id']; ?>&nodo_id=<?= $nodo_id; ?>" class="btn btn-danger btn-sm">Eliminar</a>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
