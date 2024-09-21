@@ -157,11 +157,29 @@ switch ($action) {
         break;
 
     case 'list_clientes_nodo':
-        // Obtener todos los clientes asociados a un nodo específico
-        $nodo_id = $_GET['nodo_id'];
-        $clienteNodoController = new ClienteNodoController();
-        $clientes = $clienteNodoController->getClientesByNodoId($nodo_id);  // Obtener clientes por nodo
-        include 'views/list_cliente_nodo.php';  // Incluir la vista de lista de clientes
+        if (isset($_GET['nodo_id'])) {
+            $nodo_id = $_GET['nodo_id'];
+            $nodoController = new NodoController();
+            
+            // Obtener el nodo asociado y verificar que pertenece al usuario logueado
+            $nodo = $nodoController->getNodoById($nodo_id);
+    
+            if (!$nodo || $nodo['username'] !== $_SESSION['username']) {
+                // Si el nodo no existe o no pertenece al usuario logueado, mostrar mensaje de error
+                echo "No tienes permiso para acceder a este nodo.";
+                exit();
+            }
+    
+            // Si el nodo pertenece al usuario, obtener los clientes asociados
+            $clienteNodoController = new ClienteNodoController();
+            $clientes = $clienteNodoController->getClientesByNodoId($nodo_id);  // Obtener clientes por nodo
+    
+            // Incluir la vista de lista de clientes
+            include 'views/list_cliente_nodo.php';
+        } else {
+            echo "Error: nodo_id no proporcionado.";
+            exit();
+        }
         break;
 
     case 'create_cliente_nodo':
