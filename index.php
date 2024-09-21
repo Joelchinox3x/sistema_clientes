@@ -205,26 +205,30 @@ switch ($action) {
 
     case 'edit_cliente_nodo':
         // Lógica para editar un cliente
-        $clienteNodoController = new ClienteNodoController();
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            // Procesar la actualización
-            $clienteNodoController->updateClienteNodo(
-                $_GET['id'],
-                $_POST['dni'],
-                $_POST['nombres'],
-                $_POST['apellidos'],
-                $_POST['telefono'],
-                $_POST['direccion'],
-                $_POST['ip_cliente'],
-                $_POST['latitud'],
-                $_POST['longitud'],
-                $_POST['observaciones']
-            );
-            header('Location: index.php?action=list_clientes_nodo&nodo_id=' . $_POST['nodo_id']);
-        } else {
-            // Mostrar el formulario con los datos del cliente actual
+        if (isset($_GET['id'])) {
+            $clienteNodoController = new ClienteNodoController();
+            $nodoController = new NodoController(); // Para verificar la propiedad del nodo
+            
+            // Obtener los datos del cliente
             $cliente = $clienteNodoController->getClienteById($_GET['id']);
-            include 'views/edit_cliente_nodo.php';  // Incluir vista de edición de cliente
+            
+            if ($cliente) {
+                // Obtener el nodo asociado al cliente
+                $nodo = $nodoController->getNodoById($cliente['nodo_id']);
+    
+                // Verificar si el nodo pertenece al usuario logueado
+                if ($nodo && $nodo['username'] === $_SESSION['username']) {
+                    // Mostrar el formulario de edición si el nodo pertenece al usuario
+                    include 'views/edit_cliente_nodo.php';
+                } else {
+                    // Mostrar mensaje de acceso denegado si el nodo no pertenece al usuario
+                    echo "No tienes permiso para editar este cliente.";
+                }
+            } else {
+                echo "Cliente no encontrado.";
+            }
+        } else {
+            echo "ID de cliente no proporcionado.";
         }
         break;
 
