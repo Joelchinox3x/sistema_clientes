@@ -13,6 +13,7 @@ if (isset($_GET['id'])) {
         <div class="col-md-8">
             <h2 class="mb-4 text-center">Editar Cliente del Nodo</h2>
             <form action="index.php?action=update_cliente_nodo&id=<?php echo $cliente['id']; ?>" method="POST">
+                <input type="hidden" name="nodo_id" value="<?= $cliente['nodo_id'] ?>">
                 <div class="form-group">
                     <label for="dni">DNI:</label>
                     <input type="text" class="form-control" id="dni" name="dni" value="<?php echo $cliente['dni']; ?>" required>
@@ -26,12 +27,16 @@ if (isset($_GET['id'])) {
                     <input type="text" class="form-control" id="apellidos" name="apellidos" value="<?php echo $cliente['apellidos']; ?>" required>
                 </div>
                 <div class="form-group">
+                    <label for="telefono">Telefono:</label>
+                    <input type="text" class="form-control" id="telefono" name="telefono" value="<?php echo $cliente['telefono']; ?>" required>
+                </div>
+                <div class="form-group">
                     <label for="direccion">Dirección:</label>
                     <input type="text" class="form-control" id="direccion" name="direccion" value="<?php echo $cliente['direccion']; ?>" required>
                 </div>
                 <div class="form-group">
                     <label for="ip_cliente">IP del Cliente:</label>
-                    <input type="text" class="form-control" id="ip_cliente" name="ip_cliente" value="<?php echo $cliente['ip_cliente']; ?>" required>
+                    <input type="text" class="form-control" id="ip_cliente" name="ip_cliente" value="<?php echo $cliente['ip_cliente']; ?>" >
                 </div>
                 <div class="form-group">
                     <label for="latitud">Latitud:</label>
@@ -40,6 +45,10 @@ if (isset($_GET['id'])) {
                 <div class="form-group">
                     <label for="longitud">Longitud:</label>
                     <input type="text" class="form-control" id="longitud" name="longitud" value="<?php echo $cliente['longitud']; ?>" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="observaciones">Observaciones:</label>
+                    <input type="text" class="form-control" id="observaciones" name="observaciones" value="<?php echo $cliente['observaciones']; ?>" >
                 </div>
                 <div id="map" style="height: 400px; width: 100%;"></div>
                 <br>
