@@ -21,7 +21,16 @@ class ClienteNodoController {
         $clienteNodo->setId($id);  // Asignar el ID del cliente para actualizarlo
         return $this->clienteNodoDAO->updateClienteNodo($clienteNodo);
     }
+    
+    // Función que obtiene clientes si el nodo pertenece al usuario
+    public function getClientesByNodoIdAndUsername($nodo_id, $username) {
+        return $this->clienteNodoDAO->getClientesByNodoIdAndUsername($nodo_id, $username);
+    }
 
+    // Función para verificar la propiedad del nodo
+    public function verifyNodoOwnership($nodo_id, $username) {
+        return $this->clienteNodoDAO->verifyNodoOwnership($nodo_id, $username);
+    }
     // Eliminar un cliente por su ID
     public function deleteClienteNodo($id) {
         return $this->clienteNodoDAO->deleteClienteNodo($id);
