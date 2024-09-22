@@ -159,20 +159,15 @@ switch ($action) {
     case 'list_clientes_nodo':
         if (isset($_GET['nodo_id'])) {
             $nodo_id = $_GET['nodo_id'];
-            $nodoController = new NodoController();
+            $clienteNodoController = new ClienteNodoController();
             
-            // Obtener el nodo asociado y verificar que pertenece al usuario logueado
-            $nodo = $nodoController->getNodoById($nodo_id);
+            // Obtener los clientes solo si el nodo pertenece al usuario logueado
+            $clientes = $clienteNodoController->getClientesByNodoIdAndUsername($nodo_id, $_SESSION['username']);
     
-            if (!$nodo || $nodo['username'] !== $_SESSION['username']) {
-                // Si el nodo no existe o no pertenece al usuario logueado, mostrar mensaje de error
-                echo "No tienes permiso para acceder a este nodo.";
+            if (empty($clientes)) {
+                echo "No tienes permiso para acceder a este nodo o no hay clientes asociados.";
                 exit();
             }
-    
-            // Si el nodo pertenece al usuario, obtener los clientes asociados
-            $clienteNodoController = new ClienteNodoController();
-            $clientes = $clienteNodoController->getClientesByNodoId($nodo_id);  // Obtener clientes por nodo
     
             // Incluir la vista de lista de clientes
             include 'views/list_cliente_nodo.php';
@@ -183,16 +178,15 @@ switch ($action) {
         break;
 
     case 'create_cliente_nodo':
-        // Verificar si el nodo_id está presente en la URL
         if (isset($_GET['nodo_id'])) {
-            $nodo_id = $_GET['nodo_id']; // Obtener nodo_id de la URL
-            $nodoController = new NodoController(); // Instancia para verificar propiedad del nodo
-            
-            // Obtener el nodo asociado y verificar que pertenece al usuario logueado
-            $nodo = $nodoController->getNodoById($nodo_id);
+            $nodo_id = $_GET['nodo_id'];
+            $clienteNodoController = new ClienteNodoController();
     
-            if (!$nodo || $nodo['username'] !== $_SESSION['username']) {
-                // Si el nodo no existe o no pertenece al usuario logueado, mostrar mensaje de error
+            // Verificar si el nodo pertenece al usuario logueado
+            $nodo = $clienteNodoController->verifyNodoOwnership($nodo_id, $_SESSION['username']);
+    
+            if (!$nodo) {
+                // Si el nodo no pertenece al usuario o no existe, denegar acceso
                 echo "No tienes permiso para acceder a este nodo.";
                 exit();
             }
@@ -203,9 +197,24 @@ switch ($action) {
     
         // Procesar la creación del cliente si la solicitud es POST
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $clienteNodoController = new ClienteNodoController();
+            // Validaciones básicas (DNI y nombres)
+            if (empty($_POST['dni']) || empty($_POST['nombres']) || empty($_POST['apellidos'])) {
+                echo "Error: Todos los campos obligatorios deben ser llenados.";
+                exit();
+            }
     
-            // Crear cliente y asociarlo al nodo
+            // Validar que el DNI y el teléfono sean solo números
+            if (!is_numeric($_POST['dni'])) {
+                echo "Error: El DNI debe ser un número válido.";
+                exit();
+            }
+    
+            if (!empty($_POST['telefono']) && !is_numeric($_POST['telefono'])) {
+                echo "Error: El teléfono debe contener solo números.";
+                exit();
+            }
+    
+            // Intentar crear el cliente y asociarlo al nodo
             if ($clienteNodoController->createClienteNodo(
                 $_POST['dni'],
                 $_POST['nombres'],
@@ -216,7 +225,7 @@ switch ($action) {
                 $_POST['latitud'],
                 $_POST['longitud'],
                 $_POST['observaciones'],
-                $nodo_id  // Pasar el nodo_id desde la URL
+                $nodo_id  // Pasar el nodo_id
             )) {
                 // Redirigir a la lista de clientes del nodo
                 header("Location: index.php?action=list_clientes_nodo&nodo_id=$nodo_id");
@@ -225,10 +234,11 @@ switch ($action) {
                 echo "Error al crear el cliente.";
             }
         } else {
-            // Cargar la vista de creación de cliente, pasando nodo_id a la vista
+            // Cargar la vista de creación de cliente
             include 'views/create_cliente_nodo.php';
         }
         break;
+        
 
     case 'edit_cliente_nodo':
         // Lógica para editar un cliente
