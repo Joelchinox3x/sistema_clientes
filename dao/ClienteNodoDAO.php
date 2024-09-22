@@ -88,5 +88,31 @@ class ClienteNodoDAO {
 
         return $stmt->fetch(PDO::FETCH_ASSOC);  
     }
+
+    public function getClientesByNodoIdAndUsername($nodo_id, $username) {
+        // Consulta para obtener los clientes solo si el nodo pertenece al usuario logueado
+        $query = "SELECT c.* FROM " . $this->table_name . " c 
+                  JOIN nodos n ON c.nodo_id = n.id 
+                  WHERE c.nodo_id = :nodo_id AND n.username = :username";
+
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':nodo_id', $nodo_id);
+        $stmt->bindParam(':username', $username);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
+    // Nueva función que verifica si un nodo pertenece al usuario logueado
+    public function verifyNodoOwnership($nodo_id, $username) {
+        // Consulta que verifica si el nodo pertenece al usuario
+        $query = "SELECT * FROM nodos WHERE id = :nodo_id AND username = :username";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':nodo_id', $nodo_id);
+        $stmt->bindParam(':username', $username);
+        $stmt->execute();
+
+        return $stmt->fetch(PDO::FETCH_ASSOC);  // Retorna el nodo si pertenece al usuario  
+    }
 }
 ?>
