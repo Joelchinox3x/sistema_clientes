@@ -178,6 +178,7 @@ switch ($action) {
         break;
 
     case 'create_cliente_nodo':
+    
         if (isset($_GET['nodo_id'])) {
             $nodo_id = $_GET['nodo_id'];
             $clienteNodoController = new ClienteNodoController();
@@ -186,60 +187,58 @@ switch ($action) {
             $nodo = $clienteNodoController->verifyNodoOwnership($nodo_id, $_SESSION['username']);
     
             if (!$nodo) {
-                // Si el nodo no pertenece al usuario o no existe, denegar acceso
-                echo "No tienes permiso para acceder a este nodo.";
-                exit();
+                $error_message = "No tienes permiso para acceder a este nodo.";
             }
         } else {
-            echo "Error: nodo_id no proporcionado.";
-            exit();
+            $error_message = "Error: nodo_id no proporcionado.";
         }
     
         // Procesar la creación del cliente si la solicitud es POST
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Validaciones básicas (DNI y nombres)
             if (empty($_POST['dni']) || empty($_POST['nombres']) || empty($_POST['apellidos'])) {
-                echo "Error: Todos los campos obligatorios deben ser llenados.";
-                exit();
+                $error_message = "Error: Todos los campos obligatorios deben ser llenados.";
             }
     
-            // Validar que el DNI y el teléfono sean solo números
-            if (!is_numeric($_POST['dni'])) {
-                echo "Error: El DNI debe ser un número válido.";
-                exit();
+            // Validar que el DNI sea solo números y tenga exactamente 8 dígitos
+            if (!is_numeric($_POST['dni']) || strlen($_POST['dni']) !== 8) {
+                $error_message = "Error: El DNI debe ser un número de exactamente 8 dígitos.";
             }
     
-            if (!empty($_POST['telefono']) && !is_numeric($_POST['telefono'])) {
-                echo "Error: El teléfono debe contener solo números.";
-                exit();
+            // Validar que el teléfono sea solo números y tenga exactamente 9 dígitos (si se proporciona)
+            if (!empty($_POST['telefono'])) {
+                if (!is_numeric($_POST['telefono']) || strlen($_POST['telefono']) !== 9) {
+                    $error_message = "Error: El teléfono debe ser un número de exactamente 9 dígitos.";
+                }
             }
     
-            // Intentar crear el cliente y asociarlo al nodo
-            if ($clienteNodoController->createClienteNodo(
-                $_POST['dni'],
-                $_POST['nombres'],
-                $_POST['apellidos'],
-                $_POST['telefono'],
-                $_POST['direccion'],
-                $_POST['ip_cliente'],
-                $_POST['latitud'],
-                $_POST['longitud'],
-                $_POST['observaciones'],
-                $nodo_id  // Pasar el nodo_id
-            )) {
-                // Redirigir a la lista de clientes del nodo
-                header("Location: index.php?action=list_clientes_nodo&nodo_id=$nodo_id");
-                exit();
-            } else {
-                echo "Error al crear el cliente.";
+            // Si no hay errores, proceder a crear el cliente
+            if (empty($error_message)) {
+                if ($clienteNodoController->createClienteNodo(
+                    $_POST['dni'],
+                    $_POST['nombres'],
+                    $_POST['apellidos'],
+                    $_POST['telefono'],
+                    $_POST['direccion'],
+                    $_POST['ip_cliente'],
+                    $_POST['latitud'],
+                    $_POST['longitud'],
+                    $_POST['observaciones'],
+                    $nodo_id  // Pasar el nodo_id
+                )) {
+                    // Redirigir a la lista de clientes del nodo
+                    header("Location: index.php?action=list_clientes_nodo&nodo_id=$nodo_id");
+                    exit();
+                } else {
+                    $error_message = "Error al crear el cliente.";
+                }
             }
-        } else {
-            // Cargar la vista de creación de cliente
-            include 'views/create_cliente_nodo.php';
         }
+    
+        // Cargar la vista de creación de cliente
+        include 'views/create_cliente_nodo.php';
         break;
         
-
     case 'edit_cliente_nodo':
         // Lógica para editar un cliente
         if (isset($_GET['id'])) {
