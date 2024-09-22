@@ -157,27 +157,25 @@ switch ($action) {
         break;
 
     case 'list_clientes_nodo':
-        $error_message = '';  // Variable para almacenar mensajes de error
-    
         if (isset($_GET['nodo_id'])) {
             $nodo_id = $_GET['nodo_id'];
             $clienteNodoController = new ClienteNodoController();
             
             // Obtener los clientes solo si el nodo pertenece al usuario logueado
             $clientes = $clienteNodoController->getClientesByNodoIdAndUsername($nodo_id, $_SESSION['username']);
-            
-            // Mostrar error si no hay clientes o no tiene permiso
-            if (empty($clientes)) {
-                $error_message = "No tienes permiso para acceder a este nodo o no hay clientes asociados.";
-            }
-        } else {
-            $error_message = "Error: nodo_id no proporcionado.";
-        }
     
-        // Incluir la vista de lista de clientes
-        include 'views/list_cliente_nodo.php';
+            if (empty($clientes)) {
+                echo "No tienes permiso para acceder a este nodo o no hay clientes asociados.";
+                exit();
+            }
+    
+            // Incluir la vista de lista de clientes
+            include 'views/list_cliente_nodo.php';
+        } else {
+            echo "Error: nodo_id no proporcionado.";
+            exit();
+        }
         break;
-        
 
     case 'create_cliente_nodo':
         $error_message = '';
