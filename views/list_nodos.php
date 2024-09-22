@@ -50,7 +50,7 @@
     </div>
 </div>
 
-<?php include('partials/footer.php'); ?>
+
 
 <!-- Incluir Leaflet para el mapa -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
@@ -77,3 +77,4 @@
     <?php endif; ?>
 </script>
 
+<?php include('partials/footer.php'); ?>
