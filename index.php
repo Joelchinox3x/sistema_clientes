@@ -178,6 +178,7 @@ switch ($action) {
         break;
 
     case 'create_cliente_nodo':
+        $error_message = '';
     
         if (isset($_GET['nodo_id'])) {
             $nodo_id = $_GET['nodo_id'];
