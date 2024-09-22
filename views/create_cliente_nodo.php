@@ -14,44 +14,52 @@ if (isset($_GET['nodo_id'])) {
     <div class="row justify-content-center">
         <div class="col-md-6">
             <h2 class="mb-4 text-center">Agregar Cliente al Nodo</h2>
+
+            <!-- Mostrar mensaje de error si existe -->
+            <?php if (!empty($error_message)): ?>
+                <div class="alert alert-danger">
+                    <?= $error_message; ?>
+                </div>
+            <?php endif; ?>
+
             <form action="index.php?action=create_cliente_nodo&nodo_id=<?= $nodo_id; ?>" method="POST">
                 <!-- Campo oculto para nodo_id -->
                 <input type="hidden" name="nodo_id" value="<?= $nodo_id; ?>">    
                 <div class="form-group">
                     <label for="dni">DNI:</label>
-                    <input type="text" class="form-control" id="dni" name="dni" required>
+                    <input type="text" class="form-control" id="dni" name="dni" value="<?= $_POST['dni'] ?? ''; ?>" required>
                 </div>
                 <div class="form-group">
                     <label for="nombres">Nombres:</label>
-                    <input type="text" class="form-control" id="nombres" name="nombres" required>
+                    <input type="text" class="form-control" id="nombres" name="nombres" value="<?= $_POST['nombres'] ?? ''; ?>" required>
                 </div>
                 <div class="form-group">
                     <label for="apellidos">Apellidos:</label>
-                    <input type="text" class="form-control" id="apellidos" name="apellidos" required>
+                    <input type="text" class="form-control" id="apellidos" name="apellidos" value="<?= $_POST['apellidos'] ?? ''; ?>" required>
                 </div>
                 <div class="form-group">
                     <label for="telefono">Teléfono:</label>
-                    <input type="text" class="form-control" id="telefono" name="telefono">
+                    <input type="text" class="form-control" id="telefono" name="telefono" value="<?= $_POST['telefono'] ?? ''; ?>">
                 </div>
                 <div class="form-group">
                     <label for="direccion">Dirección:</label>
-                    <input type="text" class="form-control" id="direccion" name="direccion">
+                    <input type="text" class="form-control" id="direccion" name="direccion" value="<?= $_POST['direccion'] ?? ''; ?>">
                 </div>
                 <div class="form-group">
                     <label for="ip_cliente">IP Cliente:</label>
-                    <input type="text" class="form-control" id="ip_cliente" name="ip_cliente">
+                    <input type="text" class="form-control" id="ip_cliente" name="ip_cliente" value="<?= $_POST['ip_cliente'] ?? ''; ?>">
                 </div>
                 <div class="form-group">
                     <label for="latitud">Latitud:</label>
-                    <input type="text" class="form-control" id="latitud" name="latitud" readonly>
+                    <input type="text" class="form-control" id="latitud" name="latitud" value="<?= $_POST['latitud'] ?? ''; ?>" readonly>
                 </div>
                 <div class="form-group">
                     <label for="longitud">Longitud:</label>
-                    <input type="text" class="form-control" id="longitud" name="longitud" readonly>
+                    <input type="text" class="form-control" id="longitud" name="longitud" value="<?= $_POST['longitud'] ?? ''; ?>" readonly>
                 </div>
                 <div class="form-group">
                     <label for="observaciones">Observaciones:</label>
-                    <textarea class="form-control" id="observaciones" name="observaciones"></textarea>
+                    <textarea class="form-control" id="observaciones" name="observaciones"><?= $_POST['observaciones'] ?? ''; ?></textarea>
                 </div>
                 
                 <div id="map" style="height: 400px; width: 100%;"></div><br>
@@ -64,6 +72,7 @@ if (isset($_GET['nodo_id'])) {
 </div>
 
 <!-- Incluir la biblioteca de Leaflet -->
+
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
