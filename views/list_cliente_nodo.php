@@ -4,23 +4,32 @@
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-10">
-            <h2 class="mb-4 text-center">Clientes del Nodo</h2>
-
-            <!-- Mostrar mensaje de error si existe -->
-            <?php if (!empty($error_message)): ?>
-                <div class="alert alert-danger text-center">
-                    <?= $error_message; ?>
-                </div>
-            <?php endif; ?>
-
+            <!-- Obtener el nombre del nodo -->
+            <?php 
+                $nodoController = new NodoController(); 
+                $nodo = $nodoController->getNodoById($nodo_id);  // Obtener nodo por ID
+                $nombreNodo = $nodo['nombre'];  // Nombre del nodo
+            ?>
+            <!-- Saludo personalizado -->
+            <h2 class="mb-4 text-center">Hola, <?= $_SESSION['username']; ?>, estos son los clientes de tu nodo: <?= $nombreNodo; ?></h2>
+                 
             <!-- Verificar si hay clientes asociados al nodo -->
             <?php if (empty($clientes)): ?>
                 <div class="alert alert-warning text-center">
                     No hay clientes asociados a este nodo aún.
-                    <a href="index.php?action=create_cliente_nodo&nodo_id=<?= $nodo_id; ?>" class="btn btn-primary mt-3">Crear Cliente</a>
+                    <a href="index.php?action=create_cliente_nodo&nodo_id=<?= $nodo_id; ?>" class="btn btn-primary">Crear Primer Cliente</a>
                 </div>
             <?php else: ?>
+                <!-- Mapa -->
+                <div id="map" style="height: 600px; width: 100%;" class="mb-4"></div>
+
+                <!-- Botón de crear cliente -->
+                <div class="text-right mb-3">
+                    <a href="index.php?action=create_cliente_nodo&nodo_id=<?= $nodo_id; ?>" class="btn btn-primary">Crear Nuevo Cliente</a>
+                </div>
+
                 <!-- Mostrar la tabla de clientes si existen -->
+                <h2 class="mb-4 text-center">Lista de Clientes del Nodo: <?= $nombreNodo; ?></h2>
                 <table class="table table-striped">
                     <thead>
                         <tr>
@@ -54,6 +63,8 @@
         </div>
     </div>
 </div>
+
+<?php include('partials/footer.php'); ?>
 
 <!-- Incluir Leaflet para el mapa -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
