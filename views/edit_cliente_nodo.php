@@ -17,7 +17,7 @@ $nombreNodo = $nodo['nombre'];
     <div class="row justify-content-center">
         <div class="col-md-8">
             <!-- Título con el nombre del cliente y el nombre del nodo -->
-            <h2 class="mb-4 text-center">Editar Cliente (<?= $nombreCliente; ?>) del Nodo (<?= $nombreNodo; ?>)</h2>
+            <h2 class="mb-4 text-center">Editar Cliente <?= $nombreCliente; ?> del Nodo <?= $nombreNodo; ?></h2>
             
             <form action="index.php?action=update_cliente_nodo&id=<?= $cliente['id']; ?>" method="POST">
                 <input type="hidden" name="nodo_id" value="<?= $cliente['nodo_id'] ?>">
