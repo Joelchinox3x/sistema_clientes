@@ -251,7 +251,7 @@ switch ($action) {
             // Obtener los datos del cliente
             $cliente = $clienteNodoController->getClienteById($_GET['id']);
             
-            if ($cliente) {
+            
                 // Obtener el nodo asociado al cliente
                 $nodo = $nodoController->getNodoById($cliente['nodo_id']);
     
@@ -263,9 +263,7 @@ switch ($action) {
                     // Mostrar mensaje de acceso denegado si el nodo no pertenece al usuario
                     echo "No tienes permiso para editar este cliente.";
                 }
-            } else {
-                echo "Cliente no encontrado.";
-            }
+            
         } else {
             echo "ID de cliente no proporcionado.";
         }
